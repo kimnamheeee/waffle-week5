@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { AuthProvider } from './contexts/AuthContext';
 import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
+import { AuthProvider } from './contexts/AuthContext';
 
 type Page = 'home' | 'login' | 'signup';
 
@@ -41,11 +41,14 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <div style={{ 
-        minHeight: '100vh', 
-        backgroundColor: '#f5f5f5',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
-      }}>
+      <div
+        style={{
+          minHeight: '100vh',
+          backgroundColor: '#f5f5f5',
+          fontFamily:
+            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        }}
+      >
         {renderCurrentPage()}
       </div>
     </AuthProvider>
