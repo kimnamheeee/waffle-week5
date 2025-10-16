@@ -3,6 +3,7 @@ import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import { AuthProvider } from './contexts/AuthContext';
+import './styles/common.css';
 
 type Page = 'home' | 'login' | 'signup';
 
@@ -41,16 +42,7 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <div
-        style={{
-          minHeight: '100vh',
-          backgroundColor: '#f5f5f5',
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-        }}
-      >
-        {renderCurrentPage()}
-      </div>
+      <div className="app-container">{renderCurrentPage()}</div>
     </AuthProvider>
   );
 };

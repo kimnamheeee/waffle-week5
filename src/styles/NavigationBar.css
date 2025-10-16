@@ -1,0 +1,30 @@
+/* NavigationBar 스타일 */
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 2rem;
+  background-color: white;
+}
+
+.nav-logo {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.nav-user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-user-name {
+  font-weight: bold;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 0.5rem;
+}

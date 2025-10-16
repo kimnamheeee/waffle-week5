@@ -1,4 +1,8 @@
 import { type FormEvent, useState } from 'react';
+import Button from './Button';
+import NavigationBar from './NavigationBar';
+import '../styles/common.css';
+import '../styles/auth.css';
 
 interface SignupPageProps {
   onSignupComplete: () => void;
@@ -29,246 +33,72 @@ const SignupPage = ({
   };
 
   return (
-    <div
-      style={{
-        fontFamily:
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-      }}
-    >
+    <div className="page-container">
       {/* 상단바 */}
-      <header
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '1rem 2rem',
-          borderBottom: '1px solid #ddd',
-          marginBottom: '2rem',
-          backgroundColor: 'white',
-        }}
-      >
-        <h1 style={{ margin: 0, fontSize: '1.5rem' }}>스누인턴</h1>
+      <NavigationBar
+        isAuthenticated={false}
+        onNavigateToLogin={onNavigateToLogin}
+        onNavigateToSignup={onSignupComplete}
+      />
 
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button
-            onClick={onNavigateToLogin}
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: '#2563eb',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            로그인
-          </button>
-          <button
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: '#059669',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-            }}
-          >
-            회원가입
-          </button>
-        </div>
-      </header>
-
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: 'calc(100vh - 120px)',
-          padding: '0 2rem 2rem 2rem',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '400px',
-            width: '100%',
-            border: '1px solid #ddd',
-            borderRadius: '8px',
-            padding: '2rem',
-            backgroundColor: '#f9f9f9',
-          }}
-        >
-          <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            회원가입
-          </h2>
+      <div className="auth-container">
+        <div className="auth-box">
+          <h2 className="auth-title">회원가입</h2>
 
           <form onSubmit={handleSignup}>
-            <div style={{ marginBottom: '1rem' }}>
-              <label
-                style={{
-                  display: 'block',
-                  marginBottom: '0.5rem',
-                  textAlign: 'left',
-                }}
-              >
-                이름
-              </label>
+            <div className="auth-form-group">
+              <label className="auth-label">이름</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '1rem',
-                  transition: 'border-color 0.2s, box-shadow 0.2s',
-                  boxSizing: 'border-box',
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#2563eb';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#ddd';
-                  e.target.style.boxShadow = 'none';
-                }}
+                className="auth-input"
                 required
               />
             </div>
 
-            <div style={{ marginBottom: '1rem' }}>
-              <label
-                style={{
-                  display: 'block',
-                  marginBottom: '0.5rem',
-                  textAlign: 'left',
-                }}
-              >
-                이메일
-              </label>
+            <div className="auth-form-group">
+              <label className="auth-label">이메일</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="@snu.ac.kr"
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '1rem',
-                  transition: 'border-color 0.2s, box-shadow 0.2s',
-                  boxSizing: 'border-box',
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#2563eb';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#ddd';
-                  e.target.style.boxShadow = 'none';
-                }}
+                className="auth-input"
                 required
               />
             </div>
 
-            <div style={{ marginBottom: '1rem' }}>
-              <label
-                style={{
-                  display: 'block',
-                  marginBottom: '0.5rem',
-                  textAlign: 'left',
-                }}
-              >
-                비밀번호
-              </label>
+            <div className="auth-form-group">
+              <label className="auth-label">비밀번호</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '1rem',
-                  transition: 'border-color 0.2s, box-shadow 0.2s',
-                  boxSizing: 'border-box',
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#2563eb';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#ddd';
-                  e.target.style.boxShadow = 'none';
-                }}
+                className="auth-input"
                 required
               />
             </div>
 
-            <div style={{ marginBottom: '2rem' }}>
-              <label
-                style={{
-                  display: 'block',
-                  marginBottom: '0.5rem',
-                  textAlign: 'left',
-                }}
-              >
-                비밀번호 확인
-              </label>
+            <div className="auth-form-group last">
+              <label className="auth-label">비밀번호 확인</label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '1rem',
-                  transition: 'border-color 0.2s, box-shadow 0.2s',
-                  boxSizing: 'border-box',
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#2563eb';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#ddd';
-                  e.target.style.boxShadow = 'none';
-                }}
+                className="auth-input"
                 required
               />
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={!name || !email || !password || !confirmPassword}
-              style={{
-                width: '100%',
-                padding: '0.875rem',
-                backgroundColor:
-                  !name || !email || !password || !confirmPassword
-                    ? '#d1d5db'
-                    : '#2563eb',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                cursor:
-                  !name || !email || !password || !confirmPassword
-                    ? 'not-allowed'
-                    : 'pointer',
-                opacity:
-                  !name || !email || !password || !confirmPassword ? 0.6 : 1,
-              }}
+              variant="success"
+              fullWidth
             >
               회원가입
-            </button>
+            </Button>
           </form>
         </div>
       </div>
