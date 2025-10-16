@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // axios instance 생성 - baseURL 설정
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: 'https://api-internhasha.wafflestudio.com/api',
   headers: {
     'Content-Type': 'application/json',
   },

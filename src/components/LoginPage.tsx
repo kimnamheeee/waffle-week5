@@ -1,4 +1,5 @@
 import { type FormEvent, useState } from 'react';
+import { signIn } from '../api/auth/signIn';
 import { useAuth } from '../contexts/AuthContext';
 import Button from './Button';
 import NavigationBar from './NavigationBar';
@@ -16,22 +17,27 @@ const LoginPage = ({
 }: LoginPageProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
 
-  const handleLogin = (e: FormEvent) => {
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
+    setError('');
+    setIsLoading(true);
 
-    // Mock 로그인: 실제로는 API 호출
-    // 여기서는 간단하게 이메일에서 이름을 추출
-    const name = email.split('@')[0] || '사용자';
+    try {
+      const response = await signIn({ email, password });
 
-    login({
-      name,
-      email,
-    });
+      await login(response.token);
 
-    // 로그인 성공 후 홈 화면으로 이동
-    onNavigateToHome();
+      onNavigateToHome();
+    } catch (error) {
+      console.error('Login failed:', error);
+      setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -48,6 +54,20 @@ const LoginPage = ({
           <h2 className="auth-title">로그인</h2>
 
           <form onSubmit={handleLogin}>
+            {error && (
+              <div
+                style={{
+                  color: '#e74c3c',
+                  marginBottom: '1rem',
+                  padding: '0.75rem',
+                  backgroundColor: '#fadbd8',
+                  borderRadius: '4px',
+                }}
+              >
+                {error}
+              </div>
+            )}
+
             <div className="auth-form-group">
               <label className="auth-label">이메일</label>
               <input
@@ -57,6 +77,7 @@ const LoginPage = ({
                 placeholder="@snu.ac.kr"
                 className="auth-input"
                 required
+                disabled={isLoading}
               />
             </div>
 
@@ -68,16 +89,17 @@ const LoginPage = ({
                 onChange={(e) => setPassword(e.target.value)}
                 className="auth-input"
                 required
+                disabled={isLoading}
               />
             </div>
 
             <Button
               type="submit"
-              disabled={!email || !password}
+              disabled={!email || !password || isLoading}
               variant="primary"
               fullWidth
             >
-              로그인
+              {isLoading ? '로그인 중...' : '로그인'}
             </Button>
           </form>
         </div>

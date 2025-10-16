@@ -5,6 +5,8 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { getUserInfo } from '../api/auth/getUserInfo';
+import { signOut } from '../api/auth/signOut';
 
 interface User {
   name: string;
@@ -14,8 +16,9 @@ interface User {
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
-  login: (userData: User) => void;
+  login: (token: string) => Promise<void>;
   logout: () => void;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,32 +38,53 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const login = (userData: User) => {
-    setIsAuthenticated(true);
-    setUser(userData);
-    // 실제 구현에서는 JWT 토큰을 localStorage에 저장
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('user', JSON.stringify(userData));
+  const login = async (token: string) => {
+    localStorage.setItem('token', token);
+
+    try {
+      const userInfo = await getUserInfo();
+      setIsAuthenticated(true);
+      setUser({
+        name: userInfo.name,
+        email: userInfo.email,
+      });
+    } catch (error) {
+      console.error('Failed to get user info:', error);
+      localStorage.removeItem('token');
+      throw error;
+    }
   };
 
   const logout = () => {
+    signOut();
     setIsAuthenticated(false);
     setUser(null);
-    // 저장된 인증 관련 내용 삭제
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('user');
   };
 
-  // 새로고침 시 localStorage에서 인증 상태 복원
   useEffect(() => {
-    const storedAuth = localStorage.getItem('isAuthenticated');
-    const storedUser = localStorage.getItem('user');
+    const initAuth = async () => {
+      const token = localStorage.getItem('token');
 
-    if (storedAuth === 'true' && storedUser) {
-      setIsAuthenticated(true);
-      setUser(JSON.parse(storedUser));
-    }
+      if (token) {
+        try {
+          const userInfo = await getUserInfo();
+          setIsAuthenticated(true);
+          setUser({
+            name: userInfo.name,
+            email: userInfo.email,
+          });
+        } catch (error) {
+          console.error('Failed to restore auth state:', error);
+          localStorage.removeItem('token');
+        }
+      }
+
+      setLoading(false);
+    };
+
+    initAuth();
   }, []);
 
   const value: AuthContextType = {
@@ -68,6 +92,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     user,
     login,
     logout,
+    loading,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
