@@ -23,14 +23,14 @@ export interface Post {
   updatedAt: string;
 }
 
-export interface GetPostsParams {
+interface GetPostsParams {
   page?: number;
   size?: number;
   sort?: string;
   jobCategory?: string;
 }
 
-export interface GetPostsResponse {
+interface GetPostsResponse {
   posts: Post[];
   paginator: {
     lastPage: number;
