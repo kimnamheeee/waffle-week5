@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getPosts, type Post } from '../api/post/getPosts';
+import { type Post, getPosts } from '../api/post/getPosts';
 import NavigationBar from './NavigationBar';
 import '../styles/common.css';
 import '../styles/LandingPage.css';
@@ -163,67 +163,67 @@ const LandingPage = ({
         ) : (
           <div className="posts-container">
             {posts.map((post) => (
-                <div key={post.id} className="post-card">
-                  <div className="post-header">
-                    <div className="company-logo">
-                      <svg
-                        width="48"
-                        height="48"
-                        viewBox="0 0 48 48"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect
-                          width="48"
-                          height="48"
-                          rx="8"
-                          fill="#E5E7EB"
-                        />
-                        <path
-                          d="M24 16L28 20L24 24L20 20L24 16Z"
-                          fill="#9CA3AF"
-                        />
-                        <path
-                          d="M24 24L28 28L24 32L20 28L24 24Z"
-                          fill="#9CA3AF"
-                        />
-                      </svg>
-                    </div>
-                    <div className="company-name">{post.companyName}</div>
-                    <button className="bookmark-button">
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill={post.isBookmarked ? 'currentColor' : 'none'}
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M5 5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L12 17.5L5 21V5Z"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
+              <div key={post.id} className="post-card">
+                <div className="post-header">
+                  <div className="company-logo">
+                    <svg
+                      width="48"
+                      height="48"
+                      viewBox="0 0 48 48"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect width="48" height="48" rx="8" fill="#E5E7EB" />
+                      <path
+                        d="M24 16L28 20L24 24L20 20L24 16Z"
+                        fill="#9CA3AF"
+                      />
+                      <path
+                        d="M24 24L28 28L24 32L20 28L24 24Z"
+                        fill="#9CA3AF"
+                      />
+                    </svg>
                   </div>
-
-                  <h3 className="post-title">{post.positionTitle}</h3>
-
-                  <div className="post-meta">
-                    <span className="post-category">{post.domain}</span>
-                  </div>
-
-                  <div className="post-deadline">
-                    <span>마감: {new Date(post.employmentEndDate).toLocaleDateString('ko-KR')}</span>
-                  </div>
-
-                  <p className="post-description">{post.detailSummary}</p>
+                  <div className="company-name">{post.companyName}</div>
+                  <button className="bookmark-button">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill={post.isBookmarked ? 'currentColor' : 'none'}
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5 5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L12 17.5L5 21V5Z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
                 </div>
-              ))}
-            </div>
-          )}
+
+                <h3 className="post-title">{post.positionTitle}</h3>
+
+                <div className="post-meta">
+                  <span className="post-category">{post.domain}</span>
+                </div>
+
+                <div className="post-deadline">
+                  <span>
+                    마감:{' '}
+                    {new Date(post.employmentEndDate).toLocaleDateString(
+                      'ko-KR'
+                    )}
+                  </span>
+                </div>
+
+                <p className="post-description">{post.detailSummary}</p>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* 페이지네이션 */}
         {!isLoading && !error && totalPages > 0 && (
