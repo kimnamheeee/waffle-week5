@@ -12,6 +12,12 @@
 .nav-logo {
   margin: 0;
   font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.nav-logo:hover {
+  color: #2563eb;
 }
 
 .nav-user-info {

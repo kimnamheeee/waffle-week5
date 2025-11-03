@@ -7,6 +7,7 @@ interface NavigationBarProps {
   onLogout?: () => void;
   onNavigateToLogin?: () => void;
   onNavigateToSignup?: () => void;
+  onNavigateToHome?: () => void;
 }
 
 const NavigationBar = ({
@@ -15,10 +16,13 @@ const NavigationBar = ({
   onLogout,
   onNavigateToLogin,
   onNavigateToSignup,
+  onNavigateToHome,
 }: NavigationBarProps) => {
   return (
     <header className="nav-header">
-      <h1 className="nav-logo">스누인턴</h1>
+      <h1 className="nav-logo" onClick={onNavigateToHome}>
+        스누인턴
+      </h1>
 
       <div>
         {isAuthenticated ? (
