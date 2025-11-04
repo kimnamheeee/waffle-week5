@@ -10,6 +10,7 @@ interface FilterSectionProps {
   onRecruitmentStatusChange: (value: string) => void;
   onIndustryChange: (values: string[]) => void;
   onSortOrderChange: (value: string) => void;
+  onPositionsChange: (values: string[]) => void;
   onReset: () => void;
 }
 
@@ -20,6 +21,7 @@ const FilterSection = ({
   onRecruitmentStatusChange,
   onIndustryChange,
   onSortOrderChange,
+  onPositionsChange,
   onReset,
 }: FilterSectionProps) => {
   const { isOpen, toggleDropdown, closeDropdown } = useDropdown();
@@ -45,6 +47,7 @@ const FilterSection = ({
                   '프론트엔드 개발',
                   '서버 · 백엔드 개발',
                   '앱 개발',
+                  '데이터',
                   '기타 분야',
                 ],
               },
@@ -61,6 +64,10 @@ const FilterSection = ({
                 options: ['전체'],
               },
             ]}
+            onApply={(codes) => {
+              onPositionsChange(codes);
+              closeDropdown();
+            }}
           />
         </div>
       )}

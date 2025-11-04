@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../styles/MultiSelectFilter.css';
 
 interface PositionSection {
@@ -10,7 +10,7 @@ interface PositionFilterProps {
   sections: PositionSection[];
   selectedValues?: string[];
   onValueChange?: (values: string[]) => void;
-  onApply?: (values: string[]) => void;
+  onApply?: (codes: string[]) => void;
   onReset?: () => void;
   resetLabel?: string;
   applyLabel?: string;
@@ -37,12 +37,6 @@ const PositionFilter = ({
       return next;
     });
   }, [sections]);
-
-  const allSelectedValues = useMemo(() => {
-    return Array.from(
-      new Set(Object.values(sectionValues).flatMap((vals) => vals))
-    );
-  }, [sectionValues]);
 
   const handleCheckboxChange = (sectionTitle: string, option: string) => {
     setSectionValues((prev) => {
@@ -75,7 +69,35 @@ const PositionFilter = ({
   };
 
   const handleApply = () => {
-    onApply?.(allSelectedValues);
+    // 섹션별 선택을 API 코드로 변환
+    const codes: string[] = [];
+    Object.entries(sectionValues).forEach(([title, values]) => {
+      if (title === '개발') {
+        const devMap: Record<string, string> = {
+          '프론트엔드 개발': 'FRONT',
+          '앱 개발': 'APP',
+          '서버 · 백엔드 개발': 'BACKEND',
+          데이터: 'DATA',
+          '기타 분야': 'OTHERS',
+        };
+        if (values.includes('전체')) {
+          codes.push('FRONT', 'APP', 'BACKEND', 'DATA', 'OTHERS');
+        } else {
+          values.forEach((v) => {
+            const code = devMap[v];
+            if (code) codes.push(code);
+          });
+        }
+      } else if (title === '디자인') {
+        if (values.length > 0) codes.push('DESIGN');
+      } else if (title === '기획') {
+        if (values.length > 0) codes.push('PLANNER');
+      } else if (title === '마케팅') {
+        if (values.length > 0) codes.push('MARKETING');
+      }
+    });
+
+    onApply?.(Array.from(new Set(codes)));
   };
 
   const isChecked = (sectionTitle: string, option: string) => {

@@ -29,7 +29,7 @@ interface GetPostsParams {
   domains?: string[];
   isActive?: boolean;
   order?: number;
-  positions?: string[];
+  roles?: string[];
 }
 
 interface GetPostsResponse {

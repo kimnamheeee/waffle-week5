@@ -4,12 +4,14 @@ interface FilterValues {
   recruitmentStatus: string;
   industry: string[];
   sortOrder: string;
+  positions?: string[];
 }
 
 interface ApiParams {
   domains?: string[];
   isActive?: boolean;
   order?: number;
+  roles?: string[];
 }
 
 const convertRecruitmentStatusToIsActive = (
@@ -68,6 +70,10 @@ export const convertFiltersToApiParams = (filters: FilterValues): ApiParams => {
   const domains = convertDomainsToApiDomains(filters.industry);
   if (domains !== undefined) {
     apiParams.domains = domains;
+  }
+
+  if (filters.positions && filters.positions.length > 0) {
+    apiParams.roles = filters.positions;
   }
 
   return apiParams;

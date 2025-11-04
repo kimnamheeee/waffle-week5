@@ -15,6 +15,7 @@ const LandingPage = () => {
     setRecruitmentStatus,
     setIndustry,
     setSortOrder,
+    setPositions,
     resetFilters,
   } = usePostFilters();
   const { posts, isLoading, error, totalPages } = usePosts({
@@ -60,6 +61,10 @@ const LandingPage = () => {
           onRecruitmentStatusChange={handleRecruitmentStatusChange}
           onIndustryChange={handleIndustryChange}
           onSortOrderChange={handleSortOrderChange}
+          onPositionsChange={(codes) => {
+            setPositions(codes);
+            setPage(0);
+          }}
           onReset={handleResetFilters}
         />
 
