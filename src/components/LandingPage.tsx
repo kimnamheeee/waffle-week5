@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { type Post, getPosts } from '../api/post/getPosts';
+import { usePagination } from '../hooks/usePagination';
+import { usePostFilters } from '../hooks/usePostFilters';
+import { usePosts } from '../hooks/usePosts';
 import FilterSection from './FilterSection';
 import NavigationBar from './NavigationBar';
 import Pagination from './Pagination';
@@ -8,49 +9,20 @@ import '../styles/common.css';
 import '../styles/LandingPage.css';
 
 const LandingPage = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [recruitmentStatus, setRecruitmentStatus] = useState('전체');
-  const [industry, setIndustry] = useState<string[]>([]);
-  const [sortOrder, setSortOrder] = useState('최신순');
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setIsLoading(true);
-      setError('');
-
-      try {
-        const response = await getPosts({
-          page: currentPage,
-          size: 10,
-          sort: 'createdAt,desc',
-        });
-
-        setPosts(response.posts || []);
-        setTotalPages(response.paginator?.lastPage + 1 || 0);
-      } catch (err) {
-        console.error('Failed to fetch posts:', err);
-        setError('공고를 불러오는데 실패했습니다.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPosts();
-  }, [currentPage]);
+  const { currentPage, setPage } = usePagination({ initialPage: 0 });
+  const { posts, isLoading, error, totalPages } = usePosts({
+    page: currentPage,
+  });
+  const {
+    filters,
+    setRecruitmentStatus,
+    setIndustry,
+    setSortOrder,
+    resetFilters,
+  } = usePostFilters();
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleResetFilters = () => {
-    setRecruitmentStatus('전체');
-    setIndustry([]);
-    setSortOrder('최신순');
+    setPage(page);
   };
 
   return (
@@ -61,13 +33,13 @@ const LandingPage = () => {
       {/* 메인 컨텐츠 */}
       <main className="landing-main">
         <FilterSection
-          recruitmentStatus={recruitmentStatus}
-          industry={industry}
-          sortOrder={sortOrder}
+          recruitmentStatus={filters.recruitmentStatus}
+          industry={filters.industry}
+          sortOrder={filters.sortOrder}
           onRecruitmentStatusChange={setRecruitmentStatus}
           onIndustryChange={setIndustry}
           onSortOrderChange={setSortOrder}
-          onReset={handleResetFilters}
+          onReset={resetFilters}
         />
 
         <PostList posts={posts} isLoading={isLoading} error={error} />
