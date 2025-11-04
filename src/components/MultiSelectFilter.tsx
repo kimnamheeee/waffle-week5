@@ -29,32 +29,15 @@ const MultiSelectFilter = ({
     let newValues: string[];
 
     if (option === '전체') {
-      // 전체 선택/해제
-      if (currentValues.includes('전체') || currentValues.length === 0) {
-        // 전체 해제 또는 모든 항목 선택
-        newValues = options.filter((opt) => opt !== '전체');
-      } else {
-        // 전체 선택
-        newValues = ['전체', ...options.filter((opt) => opt !== '전체')];
-      }
+      // '전체'는 독립적으로만 선택
+      newValues = ['전체'];
     } else {
-      // 개별 항목 선택/해제
-      if (currentValues.includes(option)) {
-        // 선택 해제
-        newValues = currentValues.filter((val) => val !== option);
-        // 전체도 해제
-        newValues = newValues.filter((val) => val !== '전체');
+      // 다른 항목 선택 시 '전체' 해제하고 해당 옵션만 토글
+      const withoutAll = currentValues.filter((v) => v !== '전체');
+      if (withoutAll.includes(option)) {
+        newValues = withoutAll.filter((v) => v !== option);
       } else {
-        // 선택 추가
-        newValues = [...currentValues, option];
-        // 다른 모든 항목이 선택되었으면 전체도 선택
-        const nonAllOptions = options.filter((opt) => opt !== '전체');
-        const allSelected = nonAllOptions.every((opt) =>
-          newValues.includes(opt)
-        );
-        if (allSelected && nonAllOptions.length > 0) {
-          newValues = ['전체', ...nonAllOptions];
-        }
+        newValues = [...withoutAll, option];
       }
     }
 
