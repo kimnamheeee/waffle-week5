@@ -1,0 +1,41 @@
+/* DropdownFilter 스타일 */
+.dropdown-filter-trigger-wrapper {
+  position: relative;
+  width: 200px;
+}
+
+.dropdown-filter-trigger {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.dropdown-filter-trigger:hover {
+  border-color: #9ca3af;
+}
+
+.dropdown-arrow {
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.dropdown-filter-selector {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  z-index: 1000;
+  min-width: 300px;
+}
+

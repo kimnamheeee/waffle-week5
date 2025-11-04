@@ -31,14 +31,25 @@
 
 .filter-options {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-selector-wrapper {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 88px;
+  z-index: 1000;
+  min-width: 300px;
 }
 
 .filter-row {
   display: flex;
   align-items: center;
   gap: 1rem;
+  position: relative;
 }
 
 .filter-label {
@@ -65,20 +76,20 @@
   border-color: #9ca3af;
 }
 
-.refresh-button {
+.reset-button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background-color: white;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
+  background: none;
+  border: none;
   cursor: pointer;
   font-size: 0.875rem;
+  color: #374151;
 }
 
-.refresh-button:hover {
-  background-color: #f9fafb;
+.reset-button:hover {
+  color: #111827;
 }
 
 /* 공고 리스트 */

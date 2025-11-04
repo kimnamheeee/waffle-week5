@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { type Post, getPosts } from '../api/post/getPosts';
+import { useDropdown } from '../hooks/useDropdown';
+import DropdownFilter from './DropdownFilter';
 import NavigationBar from './NavigationBar';
 import '../styles/common.css';
 import '../styles/LandingPage.css';
@@ -20,6 +22,10 @@ const LandingPage = ({
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [recruitmentStatus, setRecruitmentStatus] = useState('전체');
+  const [industry, setIndustry] = useState<string[]>([]);
+  const [sortOrder, setSortOrder] = useState('최신순');
+  const { isOpen, toggleDropdown, closeDropdown } = useDropdown();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -85,71 +91,83 @@ const LandingPage = ({
           </button>
 
           <div className="filter-options">
-            <div className="filter-row">
-              <label className="filter-label">모집상태</label>
-              <button className="filter-button">
-                <span>전체</span>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4 6L8 10L12 6"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <div className="filter-row">
-              <label className="filter-label">업종</label>
-              <button className="filter-button">
-                <span>전체</span>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4 6L8 10L12 6"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <div className="filter-row">
-              <label className="filter-label">최신순</label>
-              <button className="refresh-button">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C9.84821 2 11.5153 2.84285 12.6 4.2M12.6 4.2V2M12.6 4.2H10.4"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span>초기화</span>
-              </button>
-            </div>
+            <DropdownFilter
+              buttonLabel="모집상태"
+              options={['전체', '모집중']}
+              selectedValue={recruitmentStatus}
+              onValueChange={setRecruitmentStatus}
+              onApply={(value) => {
+                if (typeof value === 'string') {
+                  setRecruitmentStatus(value);
+                }
+              }}
+              isOpen={isOpen('recruitment-status')}
+              onToggle={() => toggleDropdown('recruitment-status')}
+              onClose={closeDropdown}
+            />
+            <DropdownFilter
+              buttonLabel="업종"
+              multiSelect
+              options={[
+                '전체',
+                '핀테크',
+                '헬스테크',
+                '교육',
+                '이커머스',
+                '푸드테크',
+                '모빌리티',
+                '컨텐츠',
+                'B2B',
+                '기타',
+              ]}
+              selectedValues={industry}
+              onValuesChange={setIndustry}
+              onApply={(values) => {
+                setIndustry(values as string[]);
+              }}
+              isOpen={isOpen('industry')}
+              onToggle={() => toggleDropdown('industry')}
+              onClose={closeDropdown}
+            />
+            <DropdownFilter
+              buttonLabel="최신순"
+              options={['공고등록순', '마감임박순']}
+              selectedValue={sortOrder}
+              onValueChange={setSortOrder}
+              onApply={(value) => {
+                if (typeof value === 'string') {
+                  setSortOrder(value);
+                }
+              }}
+              isOpen={isOpen('sort-order')}
+              onToggle={() => toggleDropdown('sort-order')}
+              onClose={closeDropdown}
+            />
+            <button
+              className="reset-button"
+              onClick={() => {
+                setRecruitmentStatus('전체');
+                setIndustry([]);
+                setSortOrder('최신순');
+              }}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C9.84821 2 11.5153 2.84285 12.6 4.2M12.6 4.2V2M12.6 4.2H10.4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span>초기화</span>
+            </button>
           </div>
         </div>
 
