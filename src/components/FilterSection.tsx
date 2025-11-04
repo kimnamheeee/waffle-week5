@@ -1,6 +1,7 @@
 import { useDropdown } from '../hooks/useDropdown';
 import Icon from '../icons/Icon';
 import DropdownFilter from './DropdownFilter';
+import PositionFilter from './PositionFilter';
 
 interface FilterSectionProps {
   recruitmentStatus: string;
@@ -25,10 +26,44 @@ const FilterSection = ({
 
   return (
     <div className="filter-section">
-      <button className="filter-dropdown">
+      <button
+        className="filter-dropdown"
+        onClick={() => toggleDropdown('position')}
+      >
         <span>직군 필터</span>
         <Icon name="chevron-down-large" size={20} />
       </button>
+
+      {isOpen('position') && (
+        <div style={{ marginTop: '0.5rem', marginBottom: '2rem' }}>
+          <PositionFilter
+            sections={[
+              {
+                title: '개발',
+                options: [
+                  '전체',
+                  '프론트엔드 개발',
+                  '서버 · 백엔드 개발',
+                  '앱 개발',
+                  '기타 분야',
+                ],
+              },
+              {
+                title: '기획',
+                options: ['전체'],
+              },
+              {
+                title: '디자인',
+                options: ['전체'],
+              },
+              {
+                title: '마케팅',
+                options: ['전체'],
+              },
+            ]}
+          />
+        </div>
+      )}
 
       <div className="filter-options">
         <DropdownFilter
