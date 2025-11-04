@@ -1,25 +1,19 @@
 import { type FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { signUp } from '../api/auth/signUp';
 import Button from './Button';
 import NavigationBar from './NavigationBar';
 import '../styles/common.css';
 import '../styles/auth.css';
 
-interface SignupPageProps {
-  onSignupComplete: () => void;
-  onNavigateToLogin: () => void;
-}
-
-const SignupPage = ({
-  onSignupComplete,
-  onNavigateToLogin,
-}: SignupPageProps) => {
+const SignupPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignup = async (e: FormEvent) => {
     e.preventDefault();
@@ -36,7 +30,7 @@ const SignupPage = ({
       await signUp({ name, email, password });
 
       alert('회원가입이 완료되었습니다! 로그인해주세요.');
-      onNavigateToLogin();
+      navigate('/login');
     } catch (error) {
       console.error('Signup failed:', error);
       setError('회원가입에 실패했습니다. 다시 시도해주세요.');
@@ -48,11 +42,7 @@ const SignupPage = ({
   return (
     <div className="page-container">
       {/* 상단바 */}
-      <NavigationBar
-        isAuthenticated={false}
-        onNavigateToLogin={onNavigateToLogin}
-        onNavigateToSignup={onSignupComplete}
-      />
+      <NavigationBar isAuthenticated={false} />
 
       <div className="auth-container">
         <div className="auth-box">

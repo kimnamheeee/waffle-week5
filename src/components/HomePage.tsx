@@ -3,17 +3,7 @@ import NavigationBar from './NavigationBar';
 import '../styles/common.css';
 import '../styles/HomePage.css';
 
-interface HomePageProps {
-  onNavigateToLogin: () => void;
-  onNavigateToSignup: () => void;
-  onNavigateToLanding?: () => void;
-}
-
-const HomePage = ({
-  onNavigateToLogin,
-  onNavigateToSignup,
-  onNavigateToLanding,
-}: HomePageProps) => {
+const HomePage = () => {
   const { isAuthenticated, user, logout } = useAuth();
 
   return (
@@ -23,9 +13,6 @@ const HomePage = ({
         isAuthenticated={isAuthenticated}
         userName={user?.name}
         onLogout={logout}
-        onNavigateToLogin={onNavigateToLogin}
-        onNavigateToSignup={onNavigateToSignup}
-        onNavigateToHome={onNavigateToLanding}
       />
 
       {/* 메인 컨텐츠 */}

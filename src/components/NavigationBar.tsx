@@ -1,3 +1,4 @@
+import { Link, useNavigate } from 'react-router-dom';
 import Button from './Button';
 import '../styles/NavigationBar.css';
 
@@ -5,23 +6,19 @@ interface NavigationBarProps {
   isAuthenticated: boolean;
   userName?: string;
   onLogout?: () => void;
-  onNavigateToLogin?: () => void;
-  onNavigateToSignup?: () => void;
-  onNavigateToHome?: () => void;
 }
 
 const NavigationBar = ({
   isAuthenticated,
   userName,
   onLogout,
-  onNavigateToLogin,
-  onNavigateToSignup,
-  onNavigateToHome,
 }: NavigationBarProps) => {
+  const navigate = useNavigate();
+
   return (
     <header className="nav-header">
-      <h1 className="nav-logo" onClick={onNavigateToHome}>
-        스누인턴
+      <h1 className="nav-logo">
+        <Link to="/">스누인턴</Link>
       </h1>
 
       <div>
@@ -34,10 +31,10 @@ const NavigationBar = ({
           </div>
         ) : (
           <div className="nav-buttons">
-            <Button variant="primary" onClick={onNavigateToLogin}>
+            <Button variant="primary" onClick={() => navigate('/login')}>
               로그인
             </Button>
-            <Button variant="success" onClick={onNavigateToSignup}>
+            <Button variant="success" onClick={() => navigate('/signup')}>
               회원가입
             </Button>
           </div>

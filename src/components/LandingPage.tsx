@@ -7,17 +7,7 @@ import PostList from './PostList';
 import '../styles/common.css';
 import '../styles/LandingPage.css';
 
-interface LandingPageProps {
-  onNavigateToLogin: () => void;
-  onNavigateToSignup: () => void;
-  onNavigateToHome?: () => void;
-}
-
-const LandingPage = ({
-  onNavigateToLogin,
-  onNavigateToSignup,
-  onNavigateToHome,
-}: LandingPageProps) => {
+const LandingPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -66,12 +56,7 @@ const LandingPage = ({
   return (
     <div className="page-container">
       {/* 상단바 */}
-      <NavigationBar
-        isAuthenticated={false}
-        onNavigateToLogin={onNavigateToLogin}
-        onNavigateToSignup={onNavigateToSignup}
-        onNavigateToHome={onNavigateToHome}
-      />
+      <NavigationBar isAuthenticated={false} />
 
       {/* 메인 컨텐츠 */}
       <main className="landing-main">
