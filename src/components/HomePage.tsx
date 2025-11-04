@@ -6,9 +6,14 @@ import '../styles/HomePage.css';
 interface HomePageProps {
   onNavigateToLogin: () => void;
   onNavigateToSignup: () => void;
+  onNavigateToLanding?: () => void;
 }
 
-const HomePage = ({ onNavigateToLogin, onNavigateToSignup }: HomePageProps) => {
+const HomePage = ({
+  onNavigateToLogin,
+  onNavigateToSignup,
+  onNavigateToLanding,
+}: HomePageProps) => {
   const { isAuthenticated, user, logout } = useAuth();
 
   return (
@@ -20,6 +25,7 @@ const HomePage = ({ onNavigateToLogin, onNavigateToSignup }: HomePageProps) => {
         onLogout={logout}
         onNavigateToLogin={onNavigateToLogin}
         onNavigateToSignup={onNavigateToSignup}
+        onNavigateToHome={onNavigateToLanding}
       />
 
       {/* 메인 컨텐츠 */}

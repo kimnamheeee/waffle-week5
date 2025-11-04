@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import HomePage from './components/HomePage';
+import LandingPage from './components/LandingPage';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import './styles/common.css';
 
-type Page = 'home' | 'login' | 'signup';
+type Page = 'home' | 'login' | 'signup' | 'landing';
 
 const AppContent = () => {
-  const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [currentPage, setCurrentPage] = useState<Page>('landing');
   const { loading } = useAuth();
 
   const navigateToHome = () => setCurrentPage('home');
+  const navigateToLanding = () => setCurrentPage('landing');
   const navigateToLogin = () => setCurrentPage('login');
   const navigateToSignup = () => setCurrentPage('signup');
 
@@ -34,6 +36,14 @@ const AppContent = () => {
 
   const renderCurrentPage = () => {
     switch (currentPage) {
+      case 'landing':
+        return (
+          <LandingPage
+            onNavigateToLogin={navigateToLogin}
+            onNavigateToSignup={navigateToSignup}
+            onNavigateToHome={navigateToLanding}
+          />
+        );
       case 'login':
         return (
           <LoginPage
@@ -48,11 +58,20 @@ const AppContent = () => {
             onNavigateToLogin={navigateToLogin}
           />
         );
-      default:
+      case 'home':
         return (
           <HomePage
             onNavigateToLogin={navigateToLogin}
             onNavigateToSignup={navigateToSignup}
+            onNavigateToLanding={navigateToLanding}
+          />
+        );
+      default:
+        return (
+          <LandingPage
+            onNavigateToLogin={navigateToLogin}
+            onNavigateToSignup={navigateToSignup}
+            onNavigateToHome={navigateToLanding}
           />
         );
     }
