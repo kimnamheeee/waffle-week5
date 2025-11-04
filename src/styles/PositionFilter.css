@@ -58,7 +58,7 @@
 }
 
 .position-checkbox:checked::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 5px;
   top: 2px;
@@ -109,4 +109,3 @@
 .position-filter-actions button:last-child:hover {
   background-color: #4b5563;
 }
-
