@@ -1,4 +1,4 @@
-export const DOMAIN_MAPPING = {
+const DOMAIN_MAPPING = {
   전체: '',
   핀테크: 'FINTECH',
   헬스테크: 'HEALTHTECH',
@@ -11,7 +11,7 @@ export const DOMAIN_MAPPING = {
   기타: 'OTHERS',
 } as const;
 
-export type DomainKey = keyof typeof DOMAIN_MAPPING;
+type DomainKey = keyof typeof DOMAIN_MAPPING;
 
 export const mapDomainToApiValue = (domain: string): string | undefined => {
   return DOMAIN_MAPPING[domain as DomainKey] || undefined;

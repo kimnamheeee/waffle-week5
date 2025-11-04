@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { usePagination } from '../hooks/usePagination';
 import { usePostFilters } from '../hooks/usePostFilters';
 import { usePosts } from '../hooks/usePosts';
 import FilterSection from './FilterSection';
+import LoginRequiredModal from './LoginRequiredModal';
 import NavigationBar from './NavigationBar';
 import Pagination from './Pagination';
 import PostList from './PostList';
@@ -9,6 +11,7 @@ import '../styles/common.css';
 import '../styles/LandingPage.css';
 
 const LandingPage = () => {
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { currentPage, setPage } = usePagination({ initialPage: 0 });
   const {
     filters,
@@ -68,13 +71,25 @@ const LandingPage = () => {
           onReset={handleResetFilters}
         />
 
-        <PostList posts={posts} isLoading={isLoading} error={error} />
+        <PostList
+          posts={posts}
+          isLoading={isLoading}
+          error={error}
+          onBookmarkClick={() => setShowLoginModal(true)}
+        />
 
         {!isLoading && !error && (
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+          />
+        )}
+
+        {showLoginModal && (
+          <LoginRequiredModal
+            onLogin={() => setShowLoginModal(false)}
+            onGoBack={() => setShowLoginModal(false)}
           />
         )}
       </main>

@@ -5,7 +5,7 @@ import ChevronDownLargeIcon from './ChevronDownLargeIcon';
 import CompanyLogoIcon from './CompanyLogoIcon';
 import RefreshIcon from './RefreshIcon';
 
-export type IconName =
+type IconName =
   | 'chevron-down'
   | 'chevron-down-large'
   | 'refresh'
@@ -28,12 +28,7 @@ const iconMap = {
   'bookmark-filled': BookmarkIcon,
 };
 
-export const Icon = ({
-  name,
-  size = 24,
-  color = 'none',
-  ...props
-}: IconProps) => {
+const Icon = ({ name, size = 24, color = 'none', ...props }: IconProps) => {
   const IconComponent = iconMap[name];
 
   const forwarded: SVGProps<SVGSVGElement> = {

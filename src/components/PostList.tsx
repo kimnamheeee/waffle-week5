@@ -5,9 +5,15 @@ interface PostListProps {
   posts: Post[];
   isLoading: boolean;
   error: string;
+  onBookmarkClick?: () => void;
 }
 
-const PostList = ({ posts, isLoading, error }: PostListProps) => {
+const PostList = ({
+  posts,
+  isLoading,
+  error,
+  onBookmarkClick,
+}: PostListProps) => {
   if (isLoading) {
     return <div className="loading-state">로딩 중...</div>;
   }
@@ -23,7 +29,7 @@ const PostList = ({ posts, isLoading, error }: PostListProps) => {
   return (
     <div className="posts-container">
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post} onBookmarkClick={onBookmarkClick} />
       ))}
     </div>
   );

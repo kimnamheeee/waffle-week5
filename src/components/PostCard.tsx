@@ -4,9 +4,14 @@ import Icon from '../icons/Icon';
 
 interface PostCardProps {
   post: Post;
+  onBookmarkClick?: () => void;
 }
 
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = ({ post, onBookmarkClick }: PostCardProps) => {
+  const handleBookmarkClick = () => {
+    onBookmarkClick?.();
+  };
+
   return (
     <div className="post-card">
       <div className="post-header">
@@ -14,7 +19,7 @@ const PostCard = ({ post }: PostCardProps) => {
           <Icon name="company-logo" size={48} />
         </div>
         <div className="company-name">{post.companyName}</div>
-        <button className="bookmark-button">
+        <button className="bookmark-button" onClick={handleBookmarkClick}>
           <Icon
             name={post.isBookmarked ? 'bookmark-filled' : 'bookmark'}
             size={24}
