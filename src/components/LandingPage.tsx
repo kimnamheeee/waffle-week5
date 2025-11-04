@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { type Post, getPosts } from '../api/post/getPosts';
 import { useDropdown } from '../hooks/useDropdown';
+import Icon from '../icons/Icon';
 import DropdownFilter from './DropdownFilter';
 import NavigationBar from './NavigationBar';
 import '../styles/common.css';
@@ -73,21 +74,7 @@ const LandingPage = ({
         <div className="filter-section">
           <button className="filter-dropdown">
             <span>직군 필터</span>
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M5 7.5L10 12.5L15 7.5"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <Icon name="chevron-down-large" size={20} />
           </button>
 
           <div className="filter-options">
@@ -151,21 +138,7 @@ const LandingPage = ({
                 setSortOrder('최신순');
               }}
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C9.84821 2 11.5153 2.84285 12.6 4.2M12.6 4.2V2M12.6 4.2H10.4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <Icon name="refresh" size={16} />
               <span>초기화</span>
             </button>
           </div>
@@ -184,41 +157,14 @@ const LandingPage = ({
               <div key={post.id} className="post-card">
                 <div className="post-header">
                   <div className="company-logo">
-                    <svg
-                      width="48"
-                      height="48"
-                      viewBox="0 0 48 48"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect width="48" height="48" rx="8" fill="#E5E7EB" />
-                      <path
-                        d="M24 16L28 20L24 24L20 20L24 16Z"
-                        fill="#9CA3AF"
-                      />
-                      <path
-                        d="M24 24L28 28L24 32L20 28L24 24Z"
-                        fill="#9CA3AF"
-                      />
-                    </svg>
+                    <Icon name="company-logo" size={48} />
                   </div>
                   <div className="company-name">{post.companyName}</div>
                   <button className="bookmark-button">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill={post.isBookmarked ? 'currentColor' : 'none'}
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5 5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21L12 17.5L5 21V5Z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <Icon
+                      name={post.isBookmarked ? 'bookmark-filled' : 'bookmark'}
+                      size={24}
+                    />
                   </button>
                 </div>
 
