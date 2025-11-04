@@ -35,7 +35,6 @@ const FilterSection = ({
           buttonLabel="모집상태"
           options={['전체', '모집중']}
           selectedValue={recruitmentStatus}
-          onValueChange={onRecruitmentStatusChange}
           onApply={(value) => {
             if (typeof value === 'string') {
               onRecruitmentStatusChange(value);
@@ -61,7 +60,6 @@ const FilterSection = ({
             '기타',
           ]}
           selectedValues={industry}
-          onValuesChange={onIndustryChange}
           onApply={(values) => {
             onIndustryChange(values as string[]);
           }}
@@ -70,10 +68,9 @@ const FilterSection = ({
           onClose={closeDropdown}
         />
         <DropdownFilter
-          buttonLabel="최신순"
+          buttonLabel={sortOrder}
           options={['공고등록순', '마감임박순']}
           selectedValue={sortOrder}
-          onValueChange={onSortOrderChange}
           onApply={(value) => {
             if (typeof value === 'string') {
               onSortOrderChange(value);

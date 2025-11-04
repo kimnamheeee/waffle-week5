@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 interface PostFilters {
   recruitmentStatus: string;
@@ -17,7 +17,7 @@ interface UsePostFiltersReturn {
 const DEFAULT_FILTERS: PostFilters = {
   recruitmentStatus: '전체',
   industry: [],
-  sortOrder: '최신순',
+  sortOrder: '공고등록순',
 };
 
 export const usePostFilters = (): UsePostFiltersReturn => {
@@ -27,6 +27,15 @@ export const usePostFilters = (): UsePostFiltersReturn => {
   const [industry, setIndustry] = useState<string[]>(DEFAULT_FILTERS.industry);
   const [sortOrder, setSortOrder] = useState<string>(DEFAULT_FILTERS.sortOrder);
 
+  const filters = useMemo(
+    () => ({
+      recruitmentStatus,
+      industry,
+      sortOrder,
+    }),
+    [recruitmentStatus, industry, sortOrder]
+  );
+
   const resetFilters = useCallback(() => {
     setRecruitmentStatus(DEFAULT_FILTERS.recruitmentStatus);
     setIndustry(DEFAULT_FILTERS.industry);
@@ -34,11 +43,7 @@ export const usePostFilters = (): UsePostFiltersReturn => {
   }, []);
 
   return {
-    filters: {
-      recruitmentStatus,
-      industry,
-      sortOrder,
-    },
+    filters,
     setRecruitmentStatus,
     setIndustry,
     setSortOrder,

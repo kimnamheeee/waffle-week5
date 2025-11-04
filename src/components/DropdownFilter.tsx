@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Icon from '../icons/Icon';
 import FilterSelector from './FilterSelector';
 import MultiSelectFilter from './MultiSelectFilter';
 import '../styles/DropdownFilter.css';
@@ -26,8 +27,6 @@ const DropdownFilter = ({
   multiSelect = false,
   selectedValue: controlledValue,
   selectedValues: controlledValues,
-  onValueChange,
-  onValuesChange,
   onApply,
   onReset,
   resetLabel = '초기화',
@@ -39,27 +38,25 @@ const DropdownFilter = ({
   const [internalValue, setInternalValue] = useState<string>(options[0] || '');
   const [internalValues, setInternalValues] = useState<string[]>([]);
 
-  const isControlled = multiSelect
-    ? controlledValues !== undefined
-    : controlledValue !== undefined;
-  const currentValue = isControlled ? controlledValue : internalValue;
-  const currentValues = isControlled ? controlledValues : internalValues;
+  useEffect(() => {
+    if (isOpen) {
+      if (multiSelect) {
+        setInternalValues((controlledValues ?? []) as string[]);
+      } else {
+        setInternalValue((controlledValue ?? options[0] ?? '') as string);
+      }
+    }
+  }, [isOpen, controlledValue, controlledValues, options, multiSelect]);
 
   const handleToggle = () => {
     onToggle();
   };
 
-  const handleApply = (value: string | string[]) => {
+  const handleApply = () => {
     if (multiSelect) {
-      if (!isControlled) {
-        setInternalValues(value as string[]);
-      }
-      onApply?.(value);
+      onApply?.(internalValues);
     } else {
-      if (!isControlled) {
-        setInternalValue(value as string);
-      }
-      onApply?.(value);
+      onApply?.(internalValue);
     }
     onClose();
   };
@@ -67,18 +64,12 @@ const DropdownFilter = ({
   const handleReset = () => {
     if (multiSelect) {
       const resetValues: string[] = [];
-      if (!isControlled) {
-        setInternalValues(resetValues);
-      }
+      setInternalValues(resetValues);
       onReset?.();
-      onValuesChange?.(resetValues);
     } else {
       const firstOption = options[0] || '';
-      if (!isControlled) {
-        setInternalValue(firstOption);
-      }
+      setInternalValue(firstOption);
       onReset?.();
-      onValueChange?.(firstOption);
     }
   };
 
@@ -90,36 +81,22 @@ const DropdownFilter = ({
         type="button"
       >
         <span>{buttonLabel}</span>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+        <Icon
+          name="chevron-down"
+          size={16}
           className={`dropdown-arrow ${isOpen ? 'open' : ''}`}
-        >
-          <path
-            d="M4 6L8 10L12 6"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        />
       </button>
       {isOpen && (
         <div className="dropdown-filter-selector">
           {multiSelect ? (
             <MultiSelectFilter
               options={options}
-              selectedValues={currentValues}
+              selectedValues={internalValues}
               onValueChange={(values) => {
-                if (!isControlled) {
-                  setInternalValues(values);
-                }
-                onValuesChange?.(values);
+                setInternalValues(values);
               }}
-              onApply={handleApply}
+              onApply={() => handleApply()}
               onReset={handleReset}
               resetLabel={resetLabel}
               applyLabel={applyLabel}
@@ -127,14 +104,11 @@ const DropdownFilter = ({
           ) : (
             <FilterSelector
               options={options}
-              selectedValue={currentValue}
+              selectedValue={internalValue}
               onValueChange={(value) => {
-                if (!isControlled) {
-                  setInternalValue(value);
-                }
-                onValueChange?.(value);
+                setInternalValue(value);
               }}
-              onApply={handleApply}
+              onApply={() => handleApply()}
               onReset={handleReset}
               resetLabel={resetLabel}
               applyLabel={applyLabel}

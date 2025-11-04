@@ -10,9 +10,6 @@ import '../styles/LandingPage.css';
 
 const LandingPage = () => {
   const { currentPage, setPage } = usePagination({ initialPage: 0 });
-  const { posts, isLoading, error, totalPages } = usePosts({
-    page: currentPage,
-  });
   const {
     filters,
     setRecruitmentStatus,
@@ -20,9 +17,33 @@ const LandingPage = () => {
     setSortOrder,
     resetFilters,
   } = usePostFilters();
+  const { posts, isLoading, error, totalPages } = usePosts({
+    page: currentPage,
+    filters,
+  });
 
   const handlePageChange = (page: number) => {
     setPage(page);
+  };
+
+  const handleRecruitmentStatusChange = (value: string) => {
+    setRecruitmentStatus(value);
+    setPage(0);
+  };
+
+  const handleIndustryChange = (values: string[]) => {
+    setIndustry(values);
+    setPage(0);
+  };
+
+  const handleSortOrderChange = (value: string) => {
+    setSortOrder(value);
+    setPage(0);
+  };
+
+  const handleResetFilters = () => {
+    resetFilters();
+    setPage(0);
   };
 
   return (
@@ -36,10 +57,10 @@ const LandingPage = () => {
           recruitmentStatus={filters.recruitmentStatus}
           industry={filters.industry}
           sortOrder={filters.sortOrder}
-          onRecruitmentStatusChange={setRecruitmentStatus}
-          onIndustryChange={setIndustry}
-          onSortOrderChange={setSortOrder}
-          onReset={resetFilters}
+          onRecruitmentStatusChange={handleRecruitmentStatusChange}
+          onIndustryChange={handleIndustryChange}
+          onSortOrderChange={handleSortOrderChange}
+          onReset={handleResetFilters}
         />
 
         <PostList posts={posts} isLoading={isLoading} error={error} />

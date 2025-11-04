@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { type Post, getPosts } from '../api/post/getPosts';
+import { convertFiltersToApiParams } from '../utils/convertFiltersToApiParams';
 
 interface UsePostsReturn {
   posts: Post[];
@@ -12,13 +13,17 @@ interface UsePostsReturn {
 interface UsePostsParams {
   page: number;
   size?: number;
-  sort?: string;
+  filters: {
+    recruitmentStatus: string;
+    industry: string[];
+    sortOrder: string;
+  };
 }
 
 export const usePosts = ({
   page,
   size = 10,
-  sort = 'createdAt,desc',
+  filters,
 }: UsePostsParams): UsePostsReturn => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,10 +35,12 @@ export const usePosts = ({
     setError('');
 
     try {
+      const apiParams = convertFiltersToApiParams(filters);
+
       const response = await getPosts({
         page,
         size,
-        sort,
+        ...apiParams,
       });
 
       setPosts(response.posts || []);
@@ -44,7 +51,7 @@ export const usePosts = ({
     } finally {
       setIsLoading(false);
     }
-  }, [page, size, sort]);
+  }, [page, size, filters]);
 
   useEffect(() => {
     fetchPosts();
