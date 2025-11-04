@@ -16,3 +16,17 @@ export type DomainKey = keyof typeof DOMAIN_MAPPING;
 export const mapDomainToApiValue = (domain: string): string | undefined => {
   return DOMAIN_MAPPING[domain as DomainKey] || undefined;
 };
+
+const API_TO_KOREAN: Record<string, string> = Object.entries(
+  DOMAIN_MAPPING
+).reduce(
+  (acc, [ko, en]) => {
+    acc[en as string] = ko;
+    return acc;
+  },
+  {} as Record<string, string>
+);
+
+export const mapApiDomainToKorean = (apiDomain: string): string => {
+  return API_TO_KOREAN[apiDomain] ?? apiDomain;
+};

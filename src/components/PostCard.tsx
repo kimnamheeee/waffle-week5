@@ -1,4 +1,5 @@
 import { type Post } from '../api/post/getPosts';
+import { mapApiDomainToKorean } from '../constants/domainMapping';
 import Icon from '../icons/Icon';
 
 interface PostCardProps {
@@ -24,7 +25,9 @@ const PostCard = ({ post }: PostCardProps) => {
       <h3 className="post-title">{post.positionTitle}</h3>
 
       <div className="post-meta">
-        <span className="post-category">{post.domain}</span>
+        <span className="post-category">
+          {mapApiDomainToKorean(post.domain)}
+        </span>
       </div>
 
       <div className="post-deadline">
