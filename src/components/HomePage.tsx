@@ -9,10 +9,7 @@ const HomePage = () => {
   return (
     <div className="page-container">
       {/* 상단바 */}
-      <NavigationBar
-        isAuthenticated={isAuthenticated}
-        onLogout={logout}
-      />
+      <NavigationBar isAuthenticated={isAuthenticated} onLogout={logout} />
 
       {/* 메인 컨텐츠 */}
       <main className="home-main">
