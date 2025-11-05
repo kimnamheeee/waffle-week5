@@ -5,7 +5,8 @@ interface PostListProps {
   posts: Post[];
   isLoading: boolean;
   error: string;
-  onBookmarkClick?: () => void;
+  onBookmarkClick?: (postId: string, isBookmarked: boolean) => void;
+  isBookmarkLoading?: (postId: string) => boolean;
 }
 
 const PostList = ({
@@ -13,6 +14,7 @@ const PostList = ({
   isLoading,
   error,
   onBookmarkClick,
+  isBookmarkLoading,
 }: PostListProps) => {
   if (isLoading) {
     return <div className="loading-state">로딩 중...</div>;
@@ -29,7 +31,16 @@ const PostList = ({
   return (
     <div className="posts-container">
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} onBookmarkClick={onBookmarkClick} />
+        <PostCard
+          key={post.id}
+          post={post}
+          onBookmarkClick={
+            onBookmarkClick
+              ? () => onBookmarkClick(post.id, post.isBookmarked)
+              : undefined
+          }
+          isLoading={isBookmarkLoading?.(post.id) ?? false}
+        />
       ))}
     </div>
   );
