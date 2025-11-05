@@ -7,10 +7,7 @@ interface NavigationBarProps {
   onLogout?: () => void;
 }
 
-const NavigationBar = ({
-  isAuthenticated,
-  onLogout,
-}: NavigationBarProps) => {
+const NavigationBar = ({ isAuthenticated, onLogout }: NavigationBarProps) => {
   const navigate = useNavigate();
 
   return (

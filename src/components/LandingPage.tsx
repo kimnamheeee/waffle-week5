@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { useBookmark } from '../hooks/useBookmark';
 import { usePagination } from '../hooks/usePagination';
 import { usePostFilters } from '../hooks/usePostFilters';
 import { usePosts } from '../hooks/usePosts';
-import { useAuth } from '../contexts/AuthContext';
 import FilterSection from './FilterSection';
 import LoginRequiredModal from './LoginRequiredModal';
 import NavigationBar from './NavigationBar';
@@ -33,9 +33,10 @@ const LandingPage = () => {
   const { toggleBookmark, isLoading: isBookmarkLoading } = useBookmark();
 
   // 로그인 상태가 변경되면 posts를 다시 불러와서 북마크 상태 초기화
+  // biome-ignore lint/correctness/useExhaustiveDependencies: refetch는 안정적인 함수이므로 의존성에서 제외
   useEffect(() => {
     refetch();
-  }, [isAuthenticated, refetch]);
+  }, [isAuthenticated]);
 
   const handlePageChange = (page: number) => {
     setPage(page);

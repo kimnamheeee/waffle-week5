@@ -17,15 +17,24 @@ export const signUp = async ({ name, email, password }: SignUpRequest) => {
         password,
       },
     };
-    
-    console.info('Attempting signup with:', { authType: 'APPLICANT', name, email });
-    
+
+    console.info('Attempting signup with:', {
+      authType: 'APPLICANT',
+      name,
+      email,
+    });
+
     const response = await axiosInstance.post('/auth/user', requestBody);
     return response.data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('SignUp API Error:', error);
-    console.error('Response data:', error.response?.data);
-    console.error('Response status:', error.response?.status);
+    if (error && typeof error === 'object' && 'response' in error) {
+      const axiosError = error as {
+        response?: { data?: unknown; status?: number };
+      };
+      console.error('Response data:', axiosError.response?.data);
+      console.error('Response status:', axiosError.response?.status);
+    }
     throw error;
   }
 };
