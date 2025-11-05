@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useBookmark } from '../hooks/useBookmark';
 import { usePagination } from '../hooks/usePagination';
 import { usePostFilters } from '../hooks/usePostFilters';
 import { usePosts } from '../hooks/usePosts';
+import { useAuth } from '../contexts/AuthContext';
 import FilterSection from './FilterSection';
 import LoginRequiredModal from './LoginRequiredModal';
 import NavigationBar from './NavigationBar';
@@ -12,6 +15,8 @@ import '../styles/LandingPage.css';
 
 const LandingPage = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const { currentPage, setPage } = usePagination({ initialPage: 0 });
   const {
     filters,
@@ -21,10 +26,11 @@ const LandingPage = () => {
     setPositions,
     resetFilters,
   } = usePostFilters();
-  const { posts, isLoading, error, totalPages } = usePosts({
+  const { posts, isLoading, error, totalPages, refetch } = usePosts({
     page: currentPage,
     filters,
   });
+  const { toggleBookmark, isLoading: isBookmarkLoading } = useBookmark();
 
   const handlePageChange = (page: number) => {
     setPage(page);
@@ -48,6 +54,20 @@ const LandingPage = () => {
   const handleResetFilters = () => {
     resetFilters();
     setPage(0);
+  };
+
+  const handleBookmarkClick = async (postId: string, isBookmarked: boolean) => {
+    // 로그인하지 않은 경우 모달 표시
+    if (!isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    // 찜하기/해제 처리
+    await toggleBookmark(postId, isBookmarked, () => {
+      // 성공 시 목록 새로고침
+      refetch();
+    });
   };
 
   return (
@@ -75,7 +95,8 @@ const LandingPage = () => {
           posts={posts}
           isLoading={isLoading}
           error={error}
-          onBookmarkClick={() => setShowLoginModal(true)}
+          onBookmarkClick={handleBookmarkClick}
+          isBookmarkLoading={isBookmarkLoading}
         />
 
         {!isLoading && !error && (
@@ -88,7 +109,10 @@ const LandingPage = () => {
 
         {showLoginModal && (
           <LoginRequiredModal
-            onLogin={() => setShowLoginModal(false)}
+            onLogin={() => {
+              setShowLoginModal(false);
+              navigate('/login');
+            }}
             onGoBack={() => setShowLoginModal(false)}
           />
         )}

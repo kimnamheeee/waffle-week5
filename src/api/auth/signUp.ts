@@ -8,19 +8,24 @@ interface SignUpRequest {
 
 export const signUp = async ({ name, email, password }: SignUpRequest) => {
   try {
-    const response = await axiosInstance.post('/auth/user', {
+    const requestBody = {
       authType: 'APPLICANT',
       info: {
-        type: 'APPLICANT',
-        successCode: 'successCode',
+        type: 'APPLICANT', // info 안에도 type 필드 필요
         name,
         email,
         password,
       },
-    });
+    };
+    
+    console.info('Attempting signup with:', { authType: 'APPLICANT', name, email });
+    
+    const response = await axiosInstance.post('/auth/user', requestBody);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    console.error('SignUp API Error:', error);
+    console.error('Response data:', error.response?.data);
+    console.error('Response status:', error.response?.status);
     throw error;
   }
 };
