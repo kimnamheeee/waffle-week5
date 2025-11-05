@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBookmark } from '../hooks/useBookmark';
 import { usePagination } from '../hooks/usePagination';
@@ -15,7 +15,7 @@ import '../styles/LandingPage.css';
 
 const LandingPage = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const { currentPage, setPage } = usePagination({ initialPage: 0 });
   const {
@@ -31,6 +31,11 @@ const LandingPage = () => {
     filters,
   });
   const { toggleBookmark, isLoading: isBookmarkLoading } = useBookmark();
+
+  // 로그인 상태가 변경되면 posts를 다시 불러와서 북마크 상태 초기화
+  useEffect(() => {
+    refetch();
+  }, [isAuthenticated, refetch]);
 
   const handlePageChange = (page: number) => {
     setPage(page);
@@ -73,7 +78,7 @@ const LandingPage = () => {
   return (
     <div className="page-container">
       {/* 상단바 */}
-      <NavigationBar isAuthenticated={false} />
+      <NavigationBar isAuthenticated={isAuthenticated} onLogout={logout} />
 
       {/* 메인 컨텐츠 */}
       <main className="landing-main">
