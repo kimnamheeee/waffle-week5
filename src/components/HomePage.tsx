@@ -11,7 +11,6 @@ const HomePage = () => {
       {/* 상단바 */}
       <NavigationBar
         isAuthenticated={isAuthenticated}
-        userName={user?.name}
         onLogout={logout}
       />
 
