@@ -1,53 +1,26 @@
-import { type FormEvent, useState } from 'react';
-import { signIn } from '../api/auth/signIn';
-import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useLogin } from '../hooks/useLogin';
 import Button from './Button';
 import NavigationBar from './NavigationBar';
 import '../styles/common.css';
 import '../styles/auth.css';
 
-interface LoginPageProps {
-  onNavigateToSignup: () => void;
-  onNavigateToHome: () => void;
-}
-
-const LoginPage = ({
-  onNavigateToSignup,
-  onNavigateToHome,
-}: LoginPageProps) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
-
-  const handleLogin = async (e: FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setIsLoading(true);
-
-    try {
-      const response = await signIn({ email, password });
-
-      await login(response.token);
-
-      onNavigateToHome();
-    } catch (error) {
-      console.error('Login failed:', error);
-      setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const LoginPage = () => {
+  const navigate = useNavigate();
+  const {
+    email,
+    password,
+    error,
+    isLoading,
+    setEmail,
+    setPassword,
+    handleLogin,
+  } = useLogin();
 
   return (
     <div className="page-container">
       {/* 상단바 */}
-      <NavigationBar
-        isAuthenticated={false}
-        onNavigateToLogin={onNavigateToHome}
-        onNavigateToSignup={onNavigateToSignup}
-      />
+      <NavigationBar isAuthenticated={false} />
 
       <div className="auth-container">
         <div className="auth-box">
@@ -101,6 +74,11 @@ const LoginPage = ({
             >
               {isLoading ? '로그인 중...' : '로그인'}
             </Button>
+            <div style={{ marginTop: '0.75rem', textAlign: 'center' }}>
+              <Button variant="success" onClick={() => navigate('/signup')}>
+                회원가입
+              </Button>
+            </div>
           </form>
         </div>
       </div>

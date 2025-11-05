@@ -26,8 +26,10 @@ export interface Post {
 interface GetPostsParams {
   page?: number;
   size?: number;
-  sort?: string;
-  jobCategory?: string;
+  domains?: string[];
+  isActive?: boolean;
+  order?: number;
+  roles?: string[];
 }
 
 interface GetPostsResponse {

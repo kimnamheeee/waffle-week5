@@ -1,58 +1,28 @@
-import { type FormEvent, useState } from 'react';
-import { signUp } from '../api/auth/signUp';
+import { useSignup } from '../hooks/useSignup';
 import Button from './Button';
 import NavigationBar from './NavigationBar';
 import '../styles/common.css';
 import '../styles/auth.css';
 
-interface SignupPageProps {
-  onSignupComplete: () => void;
-  onNavigateToLogin: () => void;
-}
-
-const SignupPage = ({
-  onSignupComplete,
-  onNavigateToLogin,
-}: SignupPageProps) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSignup = async (e: FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    if (password !== confirmPassword) {
-      setError('비밀번호가 일치하지 않습니다.');
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      await signUp({ name, email, password });
-
-      alert('회원가입이 완료되었습니다! 로그인해주세요.');
-      onNavigateToLogin();
-    } catch (error) {
-      console.error('Signup failed:', error);
-      setError('회원가입에 실패했습니다. 다시 시도해주세요.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const SignupPage = () => {
+  const {
+    name,
+    email,
+    password,
+    confirmPassword,
+    error,
+    isLoading,
+    setName,
+    setEmail,
+    setPassword,
+    setConfirmPassword,
+    handleSignup,
+  } = useSignup();
 
   return (
     <div className="page-container">
       {/* 상단바 */}
-      <NavigationBar
-        isAuthenticated={false}
-        onNavigateToLogin={onNavigateToLogin}
-        onNavigateToSignup={onSignupComplete}
-      />
+      <NavigationBar isAuthenticated={false} />
 
       <div className="auth-container">
         <div className="auth-box">
