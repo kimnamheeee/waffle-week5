@@ -44,7 +44,7 @@ export const usePosts = ({
       });
 
       setPosts(response.posts || []);
-      setTotalPages(response.paginator?.lastPage + 1 || 0);
+      setTotalPages(response.paginator?.lastPage || 0);
     } catch (err) {
       console.error('Failed to fetch posts:', err);
       setError('공고를 불러오는데 실패했습니다.');
