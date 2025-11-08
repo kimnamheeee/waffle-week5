@@ -52,7 +52,19 @@ const PostCard = ({
 
       <div className="post-deadline">
         <span>
-          마감: {new Date(post.employmentEndDate).toLocaleDateString('ko-KR')}
+          마감:{' '}
+          {(() => {
+            try {
+              const date = new Date(post.employmentEndDate as string);
+              // If invalid date or epoch (time === 0) -> 상시채용
+              if (Number.isNaN(date.getTime()) || date.getTime() === 0) {
+                return '상시채용';
+              }
+              return date.toLocaleDateString('ko-KR');
+            } catch {
+              return '상시채용';
+            }
+          })()}
         </span>
       </div>
 
