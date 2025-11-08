@@ -51,21 +51,32 @@ const PostCard = ({
       </div>
 
       <div className="post-deadline">
-        <span>
-          마감:{' '}
-          {(() => {
-            try {
-              const date = new Date(post.employmentEndDate as string);
-              // If invalid date or epoch (time === 0) -> 상시채용
-              if (Number.isNaN(date.getTime()) || date.getTime() === 0) {
-                return '상시채용';
-              }
-              return date.toLocaleDateString('ko-KR');
-            } catch {
-              return '상시채용';
+        {(() => {
+          try {
+            const raw = post.employmentEndDate as string | null | undefined;
+            const normalized = raw == null ? '' : String(raw).trim();
+
+            // Treat empty, explicit '0', 'null', or the literal '상시채용' as no-deadline
+            if (
+              normalized === '' ||
+              normalized === '0' ||
+              normalized.toLowerCase() === 'null' ||
+              normalized === '상시채용'
+            ) {
+              return <span>상시채용</span>;
             }
-          })()}
-        </span>
+
+            const date = new Date(normalized);
+            // If invalid date or epoch (time === 0) -> 상시채용
+            if (Number.isNaN(date.getTime()) || date.getTime() === 0) {
+              return <span>상시채용</span>;
+            }
+
+            return <span>마감: {date.toLocaleDateString('ko-KR')}</span>;
+          } catch {
+            return <span>상시채용</span>;
+          }
+        })()}
       </div>
 
       <p className="post-description">{post.detailSummary}</p>
