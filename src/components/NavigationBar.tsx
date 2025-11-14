@@ -9,7 +9,6 @@ interface NavigationBarProps {
 
 const NavigationBar = ({ isAuthenticated, onLogout }: NavigationBarProps) => {
   const navigate = useNavigate();
-
   return (
     <header className="nav-header">
       <h1 className="nav-logo">
@@ -18,9 +17,12 @@ const NavigationBar = ({ isAuthenticated, onLogout }: NavigationBarProps) => {
 
       <div>
         {isAuthenticated ? (
-          <Button variant="danger" onClick={onLogout}>
-            로그아웃
-          </Button>
+          <div className="nav-buttons">
+            <Button onClick={() => navigate('/my-page')}> 마이페이지 </Button>
+            <Button variant="danger" onClick={onLogout}>
+              로그아웃
+            </Button>
+          </div>
         ) : (
           <div className="nav-buttons">
             <Button variant="primary" onClick={() => navigate('/login')}>
