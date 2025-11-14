@@ -1,0 +1,23 @@
+/* MyPage 스타일 */
+.my-page-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem 2rem;
+}
+
+.my-page-content {
+  padding-top: 2rem;
+}
+
+.my-page-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.book-mark-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
