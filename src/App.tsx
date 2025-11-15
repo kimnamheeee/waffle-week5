@@ -5,6 +5,7 @@ import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import './styles/common.css';
+import MyPage from './components/MyPage';
 
 const LoadingScreen = () => (
   <div
@@ -31,6 +32,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/home" element={<HomePage />} />
+      <Route path="/my-page" element={<MyPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
