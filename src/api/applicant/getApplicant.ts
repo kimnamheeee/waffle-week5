@@ -1,6 +1,6 @@
 import axiosInstance from '../../api/axiosInstance';
 
-export interface Applicant {
+interface Applicant {
   id: string;
   name?: string;
   email?: string;
