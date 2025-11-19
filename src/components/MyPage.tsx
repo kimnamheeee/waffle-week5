@@ -40,15 +40,18 @@ const MyPage = () => {
       <main className="my-page-main">
         <div className="my-page-content">
           <div className="my-page-tabs">
-            <Button
-              variant="primary"
-              onClick={() => setSelectedTab('bookmark')}
-            >
-              찜한 목록
-            </Button>
-            <Button variant="primary" onClick={() => setSelectedTab('myinfo')}>
-              내 정보
-            </Button>
+            <div className="my-page-tabs-left">
+              <Button
+                variant="primary"
+                onClick={() => setSelectedTab('bookmark')}
+              >
+                관심 공고
+              </Button>
+              <Button variant="primary" onClick={() => setSelectedTab('myinfo')}>
+                내 정보
+              </Button>
+            </div>
+            <Button variant="primary">내 프로필 생성</Button>
           </div>
           {selectedTab === 'bookmark' && (
             <div className="book-mark-cards">
@@ -78,15 +81,7 @@ const MyPage = () => {
               ) : (
                 <div className="no-profile">
                   <p>아직 프로필이 등록되지 않았어요!</p>
-                  <Button
-                    variant="primary"
-                    onClick={() => {
-                      // 실제 생성 페이지는 만들지 않음 — 라우트만 이동
-                      window.location.href = '/create-profile';
-                    }}
-                  >
-                    내 프로필 생성
-                  </Button>
+                  <p>기업에 소개할 나의 정보를 작성해서 나를 소개해 보세요.</p>
                   <Button
                     variant="primary"
                     onClick={() => {
