@@ -14,11 +14,25 @@ const MyPage = () => {
     'bookmark'
   );
   const [bookmarks, setBookmarks] = useState<Post[]>([]);
+  const [applicant, setApplicant] = useState<null | {
+    id: string;
+    name?: string;
+  }>(null);
   useEffect(() => {
     getBookmarks().then((res) => {
       setBookmarks(res.posts);
     });
   }, []);
+
+  useEffect(() => {
+    if (selectedTab === 'myinfo') {
+      // 프로필 조회 (API의 /applicant/me 사용)
+      import('../api/applicant/getApplicant')
+        .then((m) => m.getApplicant())
+        .then((data) => setApplicant(data))
+        .catch(() => setApplicant(null));
+    }
+  }, [selectedTab]);
 
   return (
     <div className="page-container">
@@ -48,7 +62,43 @@ const MyPage = () => {
               ))}
             </div>
           )}
-          {selectedTab === 'myinfo' && <div>내 정보</div>}
+          {selectedTab === 'myinfo' && (
+            <div className="myinfo-section">
+              {applicant ? (
+                <div className="profile-card">
+                  <h3>{applicant.name ?? '프로필'}</h3>
+                  <p>ID: {applicant.id}</p>
+                  <Button
+                    variant="secondary"
+                    onClick={() => alert('프로필 수정 페이지 미구현')}
+                  >
+                    내 프로필 수정
+                  </Button>
+                </div>
+              ) : (
+                <div className="no-profile">
+                  <p>아직 프로필이 등록되지 않았어요!</p>
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      // 실제 생성 페이지는 만들지 않음 — 라우트만 이동
+                      window.location.href = '/create-profile';
+                    }}
+                  >
+                    내 프로필 생성
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      window.location.href = '/create-profile';
+                    }}
+                  >
+                    지금 바로 프로필 작성하기
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </main>
     </div>
