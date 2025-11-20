@@ -49,7 +49,10 @@ const MyPage = () => {
               >
                 관심 공고
               </Button>
-              <Button variant="primary" onClick={() => setSelectedTab('myinfo')}>
+              <Button
+                variant="primary"
+                onClick={() => setSelectedTab('myinfo')}
+              >
                 내 정보
               </Button>
             </div>

@@ -154,9 +154,7 @@ const CreateProfilePage = () => {
                     strokeLinecap="round"
                   />
                 </svg>
-                <p className="file-upload-text">
-                  PDF 파일만 업로드 가능해요.
-                </p>
+                <p className="file-upload-text">PDF 파일만 업로드 가능해요.</p>
                 {cvFile && (
                   <p className="file-upload-filename">{cvFile.name}</p>
                 )}
@@ -189,4 +187,3 @@ const CreateProfilePage = () => {
 };
 
 export default CreateProfilePage;
-
