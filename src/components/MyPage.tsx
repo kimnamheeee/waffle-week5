@@ -2,6 +2,7 @@ import NavigationBar from './NavigationBar';
 import '../styles/common.css';
 import '../styles/MyPage.css';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getBookmarks } from '../api/post/getBookmarks';
 import type { Post } from '../api/post/getPosts';
 import { useAuth } from '../contexts/AuthContext';
@@ -10,6 +11,7 @@ import Button from './Button';
 
 const MyPage = () => {
   const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState<'bookmark' | 'myinfo'>(
     'bookmark'
   );
@@ -51,7 +53,12 @@ const MyPage = () => {
                 내 정보
               </Button>
             </div>
-            <Button variant="primary">내 프로필 생성</Button>
+            <Button
+              variant="primary"
+              onClick={() => navigate('/create-profile')}
+            >
+              내 프로필 생성
+            </Button>
           </div>
           {selectedTab === 'bookmark' && (
             <div className="book-mark-cards">
