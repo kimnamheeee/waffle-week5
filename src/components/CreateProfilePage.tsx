@@ -11,7 +11,11 @@ const CreateProfilePage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [studentId, setStudentId] = useState('');
   const [department, setDepartment] = useState('');
+  const [additionalDepartments, setAdditionalDepartments] = useState<
+    Array<{ id: number; value: string }>
+  >([]);
   const [cvFile, setCvFile] = useState<File | null>(null);
+  const nextIdRef = useRef(0);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -30,6 +34,29 @@ const CreateProfilePage = () => {
 
   const handleGoBack = () => {
     navigate(-1);
+  };
+
+  const handleAddDepartment = () => {
+    if (additionalDepartments.length < 6) {
+      setAdditionalDepartments([
+        ...additionalDepartments,
+        { id: nextIdRef.current++, value: '' },
+      ]);
+    }
+  };
+
+  const handleRemoveDepartment = (id: number) => {
+    setAdditionalDepartments(
+      additionalDepartments.filter((dept) => dept.id !== id)
+    );
+  };
+
+  const handleAdditionalDepartmentChange = (id: number, value: string) => {
+    setAdditionalDepartments(
+      additionalDepartments.map((dept) =>
+        dept.id === id ? { ...dept, value } : dept
+      )
+    );
   };
 
   return (
@@ -64,19 +91,38 @@ const CreateProfilePage = () => {
                   required
                   value={department}
                   onChange={setDepartment}
-                  placeholder="컴퓨터공학부"
+                  placeholder="주전공 학과명을 입력해주세요."
                   validate={() => undefined}
                 />
                 <Button
                   variant="secondary"
-                  onClick={() => {
-                    // TODO: 추가 로직
-                  }}
+                  onClick={handleAddDepartment}
                   type="button"
+                  disabled={additionalDepartments.length >= 6}
                 >
                   추가
                 </Button>
               </div>
+
+              {additionalDepartments.map((dept) => (
+                <div key={dept.id} className="department-input-row">
+                  <TextInput
+                    value={dept.value}
+                    onChange={(value) =>
+                      handleAdditionalDepartmentChange(dept.id, value)
+                    }
+                    placeholder="다전공 학과명을 입력해주세요."
+                    validate={() => undefined}
+                  />
+                  <Button
+                    variant="secondary"
+                    onClick={() => handleRemoveDepartment(dept.id)}
+                    type="button"
+                  >
+                    삭제
+                  </Button>
+                </div>
+              ))}
             </div>
           </div>
 
