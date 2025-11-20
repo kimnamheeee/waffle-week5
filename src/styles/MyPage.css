@@ -11,8 +11,14 @@
 
 .my-page-tabs {
   display: flex;
-  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
+}
+
+.my-page-tabs-left {
+  display: flex;
+  gap: 1rem;
 }
 
 .book-mark-cards {

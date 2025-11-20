@@ -1,0 +1,140 @@
+.create-profile-main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.create-profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.create-profile-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.create-profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.create-profile-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.create-profile-section-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.create-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.text-input-with-suffix {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 2.5rem;
+  max-width: 500px;
+}
+
+.text-input-with-suffix .text-input-container {
+  flex: 1;
+}
+
+.text-input-suffix {
+  font-size: 0.875rem;
+  color: #6b7280;
+  padding-bottom: 0.75rem;
+  white-space: nowrap;
+}
+
+.department-input-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 3rem;
+  max-width: 500px;
+}
+
+.department-input-row .text-input-container {
+  flex: 1;
+}
+
+.department-input-row button {
+  height: calc(0.75rem * 2 + 1rem + 5px);
+  padding: 0.75rem 1rem;
+}
+
+.cv-section-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.file-upload-area {
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 3rem 2rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+  background-color: #ffffff;
+}
+
+.file-upload-area:hover {
+  border-color: #9ca3af;
+  background-color: #f9fafb;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.file-upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.upload-icon {
+  color: #9ca3af;
+  width: 24px;
+  height: 24px;
+}
+
+.file-upload-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  text-align: center;
+}
+
+.file-upload-filename {
+  font-size: 0.875rem;
+  color: #111827;
+  margin: 0;
+  font-weight: 500;
+}
+
+.create-profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}

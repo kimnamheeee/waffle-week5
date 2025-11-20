@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import CreateProfilePage from './components/CreateProfilePage';
 import HomePage from './components/HomePage';
 import LandingPage from './components/LandingPage';
 import LoginPage from './components/LoginPage';
@@ -33,6 +34,7 @@ const AppRoutes = () => {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/home" element={<HomePage />} />
       <Route path="/my-page" element={<MyPage />} />
+      <Route path="/create-profile" element={<CreateProfilePage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
