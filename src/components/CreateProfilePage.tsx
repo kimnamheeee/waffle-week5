@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Button from './Button';
 import NavigationBar from './NavigationBar';
 import TextInput from './TextInput';
@@ -8,6 +8,8 @@ import '../styles/CreateProfilePage.css';
 
 const CreateProfilePage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isEditMode = searchParams.get('mode') === 'edit';
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [studentId, setStudentId] = useState('');
   const [department, setDepartment] = useState('');
@@ -15,13 +17,60 @@ const CreateProfilePage = () => {
     Array<{ id: number; value: string }>
   >([]);
   const [cvFile, setCvFile] = useState<File | null>(null);
+  const [errors, setErrors] = useState<{ [k: string]: string | undefined }>({});
   const nextIdRef = useRef(0);
+
+  // Fetch existing profile to pre-populate form ONLY when editing
+  useEffect(() => {
+    if (!isEditMode) return;
+    import('../api/applicant/getApplicant')
+      .then((m) => m.getApplicant())
+      .then((data) => {
+        if (data.enrollYear) {
+          const twoDigit = String(data.enrollYear % 100).padStart(2, '0');
+          setStudentId(twoDigit);
+        }
+        if (data.department) {
+          const depts = data.department
+            .split(',')
+            .map((d) => d.trim())
+            .filter(Boolean);
+          if (depts.length > 0) {
+            setDepartment(depts[0]);
+            if (depts.length > 1) {
+              setAdditionalDepartments(
+                depts.slice(1).map((d, i) => ({ id: i, value: d }))
+              );
+              nextIdRef.current = depts.length - 1;
+            }
+          }
+        }
+      })
+      .catch(() => {
+        // no profile yet, leave fields empty
+      });
+  }, [isEditMode]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
-      setCvFile(file);
+    if (!file) return;
+    // Validate extension and size <= 5MB
+    const isPdf =
+      file.type === 'application/pdf' ||
+      file.name.toLowerCase().endsWith('.pdf');
+    if (!isPdf) {
+      setErrors((s) => ({ ...s, cv: 'PDF 파일만 업로드 가능합니다.' }));
+      return;
     }
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors((s) => ({
+        ...s,
+        cv: '5MB 이하의 PDF 파일만 업로드 가능합니다.',
+      }));
+      return;
+    }
+    setErrors((s) => ({ ...s, cv: undefined }));
+    setCvFile(file);
   };
 
   const handleFileClick = () => {
@@ -29,7 +78,74 @@ const CreateProfilePage = () => {
   };
 
   const handleSave = () => {
-    // TODO: API 호출
+    // Validation
+    const newErrors: { [k: string]: string | undefined } = {};
+
+    // studentId must be exactly 2 digits
+    if (!/^[0-9]{2}$/.test(studentId)) {
+      newErrors.studentId = '두 자리 수 숫자로 작성해주세요.';
+    }
+
+    // primary major required
+    if (!department || department.trim() === '') {
+      newErrors.department = '주전공을 입력해주세요.';
+    }
+
+    // additional majors must not duplicate primary or each other
+    const extras = additionalDepartments
+      .map((d) => d.value.trim())
+      .filter(Boolean);
+    const duplicates =
+      extras.some((v, i) => extras.indexOf(v) !== i) ||
+      extras.includes(department.trim());
+    if (duplicates) {
+      newErrors.departmentExtras = '다전공은 중복될 수 없습니다.';
+    }
+
+    // CV required
+    if (!cvFile) {
+      newErrors.cv = '이력서(PDF)를 업로드해주세요.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // Transform studentId to full year
+    const num = parseInt(studentId, 10);
+    const fullYear = num >= 80 ? 1900 + num : 2000 + num;
+
+    // Build department string: primary first, then extras separated by comma
+    const deptList = [department.trim(), ...extras];
+    const uniqueDeptList = Array.from(new Set(deptList));
+    const deptString = uniqueDeptList.join(',');
+
+    // Build cvKey as: static/private/CV/{rand10}_{YYYYMMDD}/{filename}.pdf
+    const rand = Math.random().toString(36).slice(2, 12);
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const datePart = `${yyyy}${mm}${dd}`;
+    const safeFilename = (cvFile as File).name.replace(/\s+/g, '_');
+    const cvKey = `static/private/CV/${rand}_${datePart}/${safeFilename}`;
+
+    // send PUT request
+    import('../api/applicant/putApplicant')
+      .then((m) =>
+        m.putApplicant({ enrollYear: fullYear, department: deptString, cvKey })
+      )
+      .then(() => {
+        // navigate back to my-page so user can see profile
+        navigate('/my-page');
+      })
+      .catch(() => {
+        setErrors((s) => ({
+          ...s,
+          submit: '서버 요청 중 오류가 발생했습니다.',
+        }));
+      });
   };
 
   const handleGoBack = () => {
@@ -84,6 +200,9 @@ const CreateProfilePage = () => {
                 />
                 <span className="text-input-suffix">학번</span>
               </div>
+              {errors.studentId && (
+                <div className="error-text">{errors.studentId}</div>
+              )}
 
               <div className="department-input-row">
                 <TextInput
@@ -103,6 +222,12 @@ const CreateProfilePage = () => {
                   추가
                 </Button>
               </div>
+              {errors.department && (
+                <div className="error-text">{errors.department}</div>
+              )}
+              {errors.departmentExtras && (
+                <div className="error-text">{errors.departmentExtras}</div>
+              )}
 
               {additionalDepartments.map((dept) => (
                 <div key={dept.id} className="department-input-row">
@@ -156,10 +281,25 @@ const CreateProfilePage = () => {
                 </svg>
                 <p className="file-upload-text">PDF 파일만 업로드 가능해요.</p>
                 {cvFile && (
-                  <p className="file-upload-filename">{cvFile.name}</p>
+                  <div
+                    style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+                  >
+                    <p className="file-upload-filename">{cvFile.name}</p>
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        setCvFile(null);
+                        setErrors((s) => ({ ...s, cv: undefined }));
+                      }}
+                      type="button"
+                    >
+                      삭제
+                    </Button>
+                  </div>
                 )}
               </div>
             </div>
+            {errors.cv && <div className="error-text">{errors.cv}</div>}
           </div>
 
           <div className="create-profile-actions">
