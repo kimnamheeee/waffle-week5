@@ -19,7 +19,18 @@ const MyPage = () => {
   const [applicant, setApplicant] = useState<null | {
     id: string;
     name?: string;
+    email?: string;
+    enrollYear?: number;
+    department?: string;
   }>(null);
+
+  // fetch applicant on mount so header button can reflect state
+  useEffect(() => {
+    import('../api/applicant/getApplicant')
+      .then((m) => m.getApplicant())
+      .then((data) => setApplicant(data))
+      .catch(() => setApplicant(null));
+  }, []);
   useEffect(() => {
     getBookmarks().then((res) => {
       setBookmarks(res.posts);
@@ -42,25 +53,14 @@ const MyPage = () => {
       <main className="my-page-main">
         <div className="my-page-content">
           <div className="my-page-tabs">
-            <div className="my-page-tabs-left">
-              <Button
-                variant="primary"
-                onClick={() => setSelectedTab('bookmark')}
-              >
-                관심 공고
-              </Button>
-              <Button
-                variant="primary"
-                onClick={() => setSelectedTab('myinfo')}
-              >
-                내 정보
-              </Button>
-            </div>
             <Button
               variant="primary"
-              onClick={() => navigate('/create-profile')}
+              onClick={() => setSelectedTab('bookmark')}
             >
-              내 프로필 생성
+              관심 공고
+            </Button>
+            <Button variant="primary" onClick={() => setSelectedTab('myinfo')}>
+              내 정보
             </Button>
           </div>
           {selectedTab === 'bookmark' && (
@@ -79,11 +79,19 @@ const MyPage = () => {
             <div className="myinfo-section">
               {applicant ? (
                 <div className="profile-card">
-                  <h3>{applicant.name ?? '프로필'}</h3>
-                  <p>ID: {applicant.id}</p>
+                  <h3>프로필</h3>
+                  <p>이름: {applicant.name}</p>
+                  <p>이메일: {applicant.email}</p>
+                  <p>
+                    학번:{' '}
+                    {applicant.enrollYear
+                      ? `${String(applicant.enrollYear % 100).padStart(2, '0')}학번`
+                      : ''}
+                  </p>
+                  <p>학과: {applicant.department}</p>
                   <Button
                     variant="secondary"
-                    onClick={() => alert('프로필 수정 페이지 미구현')}
+                    onClick={() => navigate('/create-profile?mode=edit')}
                   >
                     내 프로필 수정
                   </Button>

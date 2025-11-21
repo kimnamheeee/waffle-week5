@@ -4,7 +4,9 @@ interface Applicant {
   id: string;
   name?: string;
   email?: string;
-  // 필요에 따라 다른 필드 추가
+  enrollYear?: number; // e.g. 2019, 2021
+  department?: string; // comma separated, primary first
+  cvKey?: string;
 }
 
 export const getApplicant = async (): Promise<Applicant> => {
